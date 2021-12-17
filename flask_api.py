@@ -5,6 +5,8 @@ import pandas as pd
 import flasgger
 from flasgger import Swagger
 
+# 2 main APIs
+
 # Starting a flask app
 app=Flask(__name__)
 Swagger(app)
@@ -12,10 +14,13 @@ Swagger(app)
 pickle_in = open("classifier.pkl","rb")
 classifier=pickle.load(pickle_in)
 
+# Provide a decorator
+# Creating route API 
 @app.route('/')
 def welcome():
     return "Welcome All"
 
+# Adding decorator
 @app.route('/predict',methods=["Get"])
 def predict_note_authentication():
     
@@ -44,6 +49,7 @@ def predict_note_authentication():
             description: The output values
         
     """
+    # Comes from the pickle file 
     variance=request.args.get("variance")
     skewness=request.args.get("skewness")
     curtosis=request.args.get("curtosis")
@@ -52,6 +58,8 @@ def predict_note_authentication():
     print(prediction)
     return "Hello The answer is"+str(prediction)
 
+# Using predict file for testing 
+# Method POST used 
 @app.route('/predict_file',methods=["POST"])
 def predict_note_file():
     """Let's Authenticate the Banks Note 
@@ -76,6 +84,6 @@ def predict_note_file():
 
 # When
 if __name__=='__main__':
-    app.run(host='0.0.0.0',port=8000)
+    app.run(host='127.0.0.1',port=8000)
     
     
