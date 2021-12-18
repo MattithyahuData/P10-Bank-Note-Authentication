@@ -3,12 +3,13 @@ import numpy as np
 import pickle
 import pandas as pd
 import flasgger
-from flasgger import Swagger
+from flasgger import Swagger # automatically generates frontend UI
 
 # 2 main APIs
 
 # Starting a flask app
 app=Flask(__name__)
+# initialising app from Swagger
 Swagger(app)
 
 pickle_in = open("classifier.pkl","rb")
