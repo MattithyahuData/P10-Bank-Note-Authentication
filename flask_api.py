@@ -82,7 +82,7 @@ def predict_note_file():
     
     return str(list(prediction))
 
-# When
+# When IT IS true
 if __name__=='__main__':
     app.run(host='127.0.0.1',port=8000)
     
