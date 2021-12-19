@@ -1,22 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 13 02:20:31 2020
-
-@author: Krish Naik
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 15 12:50:04 2020
-
-@author: krish.naik
-"""
-
-
+# Importing project dependencies 
 import numpy as np
 import pickle
 import pandas as pd
-#from flasgger import Swagger
 import streamlit as st 
 
 from PIL import Image
@@ -65,7 +50,7 @@ def predict_note_authentication(variance,skewness,curtosis,entropy):
     return prediction
 
 
-
+# Streamlit allows you to implement HTML in python code
 def main():
     st.title("Bank Authenticator")
     html_temp = """
@@ -79,6 +64,7 @@ def main():
     curtosis = st.text_input("curtosis","Type Here")
     entropy = st.text_input("entropy","Type Here")
     result=""
+    # If button is clicked then output result 
     if st.button("Predict"):
         result=predict_note_authentication(variance,skewness,curtosis,entropy)
     st.success('The output is {}'.format(result))
