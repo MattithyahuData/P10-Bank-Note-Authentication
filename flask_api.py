@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 import pandas as pd
 import flasgger
-from flasgger import Swagger # automatically generates frontend UI
+from flasgger import Swagger  # automatically generates frontend UI
 
 # 2 main APIs
 
