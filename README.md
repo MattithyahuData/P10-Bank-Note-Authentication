@@ -1,4 +1,4 @@
-💵 Bank Note Authentication: Project Overview
+# 💵 Bank Note Authentication: Project Overview
 * End to end project classifying real and fake bank notes.
 * Apache Spark Python API used for speed benefits. 
 
