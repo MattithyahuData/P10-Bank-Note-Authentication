@@ -92,7 +92,7 @@ I looked at the distributions of the data and the value counts for the various c
 <img src="images/histogramdistribution.png" />
 
 *   The correlation matrix shows those features with strong and particularly weak correlations 
-<img src="images/images/data_correlation.png" />
+<img src="images/data_correlation.png" />
 
 
 <a name="FeatEng"></a>  
