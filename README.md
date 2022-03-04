@@ -3,19 +3,19 @@
 * Apache Spark Python API used for speed benefits. 
 
 ## Table of Contents 
-[Resources](#resources)<br>
-[Data Collection](#DataCollection)<br>
-[Data Pre-processing](#DataPre-processing)<br>
-[Data Warehousing](#DataWarehousing)<br>
-[Exploratory data analysis](#EDA)<br>
-[Feature Engineering](#FeatEng)<br>
-[ML/DL Model Building](#ModelBuild)<br>
-[Model performance](#ModelPerf)<br>
-[Model Evaluation](#ModelEval)<br>
-[Project Management (Agile | Scrum)](#Prjmanage)<br>
-[Project Evaluation](#PrjEval)<br>
-[Looking Ahead](#Lookahead)<br>
-[Questions | Contact me ](#Lookahead)<br>
+*   [Resources](#resources)<br>
+*   [Data Collection](#DataCollection)<br>
+*   [Data Pre-processing](#DataPre-processing)<br>
+*   [Data Warehousing](#DataWarehousing)<br>
+*   [Exploratory data analysis](#EDA)<br>
+*   [Feature Engineering](#FeatEng)<br>
+*   [ML/DL Model Building](#ModelBuild)<br>
+*   [Model performance](#ModelPerf)<br>
+*   [Model Evaluation](#ModelEval)<br>
+*   [Project Management (Agile/Scrum/Kanban)](#Prjmanage)<br>
+*   [Project Evaluation](#PrjEval)<br>
+*   [Looking Ahead](#Lookahead)<br>
+*   [Questions & Contact me](#Lookahead)<br>
 
 <a name="Resources"></a>  
 
@@ -43,7 +43,7 @@ Powershell command for data import using kaggle API <br>
 ```
 [Data source link](https://www.kaggle.com/ritesaluja/bank-note-authentication-uci-data)
 [Data](Data/BankNote_Authentication.csv)
-*  Rows: 1372 | Columns: 5
+*  Rows: 1372 / Columns: 5
     *   variance                   
     *   skewness                      
     *   curtosis                 
@@ -71,15 +71,43 @@ data = data.withColumnRenamed("class","outcome")
 
 <a name="DataWarehousing"></a>
 
-## [Data Warehousing](Code/P7_Code.ipynb)
+## [Data Warehousing](Code/P10_Code.ipynb)
 I warehouse all data in a Postgre database for later use and reference.
 
 *   ETL in python to PostgreSQL Database.
 *   Formatted column headers to SQL compatibility.  
 
+```python 
+# Function to warehouse data in a Postgre database and save cleaned data in Data folder -  AS THIS IS PYSPARK, THERE WAS A NEED TO ADD .toPandas anywhere the dataset is called 
+def store_data(data,tablename):
+    """
+    :param data: variable, enter name of dataset you'd like to warehouse
+    :param tablename: str, enter name of table for data 
+    """
+
+    # SQL table header format
+    tablename = tablename.lower()
+    tablename = tablename.replace(' ','_')
+
+    # Saving cleaned data as csv
+    data.toPandas().to_csv(f'../Data/{tablename}_clean.csv', index=False)
+
+    # Engine to access postgre
+    engine = create_engine('postgresql+psycopg2://postgres:password@localhost:5432/projectsdb')
+
+    # Loads dataframe into PostgreSQL and replaces table if it exists
+    data.toPandas().to_sql(f'{tablename}', engine, if_exists='replace',index=False)
+
+    # Confirmation of ETL 
+    return("ETL successful, {num} rows loaded into table: {tb}.".format(num=len(data.toPandas().iloc[:,0]), tb=tablename))
+ 
+# Calling store_data function to warehouse cleaned data
+store_data(data,"P10 Bank Note Authentication")
+```
+
 <a name="EDA"></a>  
 
-## [Exploratory data analysis](Code/P7_Code.ipynb) 
+## [Exploratory data analysis](Code/P10_Code.ipynb) 
 I looked at the distributions of the data and the value counts for the various categorical variables that would be fed into the model. Below are a few highlights from the analysis.
 *   55.54% of the bank notes in the data are real notes.
 
@@ -97,9 +125,9 @@ I looked at the distributions of the data and the value counts for the various c
 
 <a name="FeatEng"></a>  
 
-## [Feature Engineering](Code/P7_Code.ipynb) 
+## [Feature Engineering](Code/P10_Code.ipynb) 
 There was no need to transform the categorical variable(s) into dummy variables as they are all numeric. I also split the data into train and tests sets with a test size of 20%.
-*   I had to random Split instead of using train_test_split from sklearn 
+*   I had to random Split instead of using train_test_split from sklearn <br>
 ```python
 # Splitting data into train and test data
 train_data,test_data=model_data.randomSplit([0.80,0.20], seed=23)
@@ -110,10 +138,10 @@ train_data,test_data=model_data.randomSplit([0.80,0.20], seed=23)
 
 <a name="ModelBuild"></a> 
 
-## [ML/DL Model Building](Code/P7_Code.ipynb)
+## [ML/DL Model Building](Code/P10_Code.ipynb)
 
 I used the LogisticRegression model and evaluated them using initially using accuracy_score and a confusions matrix. 
-*   I fed the independent and dependent features to the model and training it on the training data 
+*   I fed the independent and dependent features to the model and training it on the training data <br>
 ```python
 # Calling LinearRegression algorithm and applying features and outcome 
 regressor=LogisticRegression(featuresCol='features', labelCol='outcome')
@@ -124,14 +152,14 @@ model=regressor.fit(train_data)
 
 <a name="ModelPerf"></a> 
 
-## [Model performance](Code/P7_Code.ipynb)
+## [Model performance](Code/P10_Code.ipynb)
 The Logistic Regression model performed well on the train and test sets. 
 *   **Logistic Regression** : Accuracy = 100% 
 
 <!-- 
 <a name="ModelOpt"></a> 
 
-## [Model Optimisation](Code/P7_Code.ipynb)
+## [Model Optimisation](Code/P10_Code.ipynb)
 In this step, I used GridsearchCV and RandomizedSearchCV to find the best parameters to optimise the performance of the model.
 Using the best parameters, I improved the SVC model accuracy of SVC by **1.3%**. The Logistic Regression model however saw no increase in accuracy. 
 
@@ -140,7 +168,7 @@ Using the best parameters, I improved the SVC model accuracy of SVC by **1.3%**.
 
 <a name="ModelEval"></a> 
 
-## [Model Evaluation](Code/P7_Code.ipynb)
+## [Model Evaluation](Code/P10_Code.ipynb)
 * The ROC Curve shows the accuracy show reflect of both the train and test datasets 
 <img src="images/ROCtrain.png" />
 <img src="images/ROCtest.png" />
@@ -153,7 +181,7 @@ Using the best parameters, I improved the SVC model accuracy of SVC by **1.3%**.
 <!-- 
 <a name="ModelProd"></a> 
 
-## [Model Productionisation](Code/P7_Code.ipynb)
+## [Model Productionisation](Code/P10_Code.ipynb)
 *   I used the pickle library to export the model. 
 ```python
 # Dump model into pickle file
@@ -167,7 +195,7 @@ I built a flask REST API endpoint that was hosted on a local webserver before He
 
 <a name="Prjmanage"></a> 
 
-## [Project Management (Agile | Scrum)](https://www.atlassian.com/software/jira)
+## [Project Management (Agile/Scrum/Kanban)](https://www.atlassian.com/software/jira)
 * Resources used
     * Jira
     * Confluence
@@ -191,7 +219,7 @@ I built a flask REST API endpoint that was hosted on a local webserver before He
 
 <a name="Questions"></a> 
 
-## Questions | Contact me 
+## Questions & Contact me 
 For questions, feedback, and contribution requests contact me
 * ### [Click here to email me](mailto:theanalyticsolutions@gmail.com) 
 * ### [See more projects here](https://github.com/MattithyahuData?tab=repositories)
